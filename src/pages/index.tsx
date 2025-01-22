@@ -14,17 +14,42 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
 });
 
+// Extended Todo type to include creation date
+interface TodoWithDate extends Todo {
+  createdAt: string;
+}
+
+const STORAGE_KEY = "todos-next-app";
+
 export default function Home() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<TodoWithDate[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Load todos from localStorage on initial render
+  useEffect(() => {
+    const savedTodos = localStorage.getItem(STORAGE_KEY);
+    if (savedTodos) {
+      setTodos(JSON.parse(savedTodos));
+    }
+  }, []);
+
+  // Save todos to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = () => {
     if (newTodo.trim()) {
       setTodos([
         ...todos,
-        { id: Date.now(), text: newTodo.trim(), completed: false },
+        {
+          id: Date.now(),
+          text: newTodo.trim(),
+          completed: false,
+          createdAt: new Date().toISOString(),
+        },
       ]);
       setNewTodo("");
     }
@@ -63,9 +88,12 @@ export default function Home() {
 
   return (
     <div
-      className={`${dmSans.variable}  min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-dm-sans)] flex justify-center items-center flex-col font-medium tracking-tighter`}
+      className={`${dmSans.variable} min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-dm-sans)] flex justify-center items-center flex-col font-medium tracking-tighter`}
     >
       <div className="w-full max-w-md space-y-6 flex justify-center flex-col">
+        <h1 className="text-3xl font-bold">
+          {new Date().toISOString().split("T")[0]}
+        </h1>
         <AnimatePresence initial={false}>
           {todos.map((todo) => (
             <motion.div
@@ -104,15 +132,16 @@ export default function Home() {
                 />
               ) : (
                 <motion.span
-                  className="flex-grow group relative text-3xl"
+                  className="flex-grow group relative text-3xl text-nowrap overflow-clip text-ellipsis max-md:max-w-[10rem]"
                   onClick={() => startEditing(todo.id)}
                   initial={false}
-                  style={{
+                  animate={{
                     opacity: todo.completed ? "60%" : "100%",
                   }}
                   transition={{ duration: 0.3 }}
                 >
                   {todo.text}
+
                   {todo.completed && (
                     <motion.div
                       className="h-px bg-current absolute top-[56%]"
@@ -152,7 +181,7 @@ export default function Home() {
             }}
           />
         </motion.div>
-      </AnimatePresence>{" "}
+      </AnimatePresence>
     </div>
   );
 }
