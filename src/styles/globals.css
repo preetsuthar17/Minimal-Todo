@@ -57,3 +57,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+input {
+  font-size: 1.875rem /* 30px */ !important;
+  line-height: 2.25rem /* 36px */ !important;
+}
