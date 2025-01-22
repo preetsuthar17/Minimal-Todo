@@ -90,7 +90,12 @@ export default function Home() {
     <div
       className={`${dmSans.variable} min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-dm-sans)] flex justify-center items-center  text-left flex-col font-medium tracking-tighter`}
     >
-      <div className="w-full max-w-md gap-[4rem] flex justify-center flex-col">
+      <motion.div
+        className="w-full max-w-md flex justify-center flex-col"
+        initial={false}
+        animate={{ gap: todos.length === 0 ? "1rem" : "4rem" }}
+        transition={{ duration: 0.3 }}
+      >
         <h1 className="text-3xl opacity-40 font-bold text-left flex items-start justify-start">
           {new Date().toISOString().split("T")[0]}
         </h1>
@@ -184,7 +189,7 @@ export default function Home() {
             />
           </motion.div>
         </AnimatePresence>
-      </div>
+      </motion.div>
     </div>
   );
 }
