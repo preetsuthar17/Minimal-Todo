@@ -88,100 +88,103 @@ export default function Home() {
 
   return (
     <div
-      className={`${dmSans.variable} min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-dm-sans)] flex justify-center items-center flex-col font-medium tracking-tighter`}
+      className={`${dmSans.variable} min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-dm-sans)] flex justify-center items-center  text-left flex-col font-medium tracking-tighter`}
     >
-      <div className="w-full max-w-md space-y-6 flex justify-center flex-col">
-        <h1 className="text-3xl font-bold">
+      <div className="w-full max-w-md gap-[4rem] flex justify-center flex-col">
+        <h1 className="text-3xl opacity-40 font-bold text-left flex items-start justify-start">
           {new Date().toISOString().split("T")[0]}
         </h1>
-        <AnimatePresence initial={false}>
-          {todos.map((todo) => (
-            <motion.div
-              key={todo.id}
-              className="flex items-center space-x-2"
-              layout
-              initial={{ opacity: 0, y: 50, filter: "blur(20px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: 50, filter: "blur(20px)" }}
-              transition={{ duration: 0.3 }}
-            >
-              <Checkbox
-                checked={todo.completed}
-                onCheckedChange={() => toggleTodo(todo.id)}
-                className="mr-2 rounded-full size-6 border-2"
-              />
-              {editingId === todo.id ? (
-                <Input
-                  value={todo.text}
-                  className="border-t-0 border-r-0 border-l-0 focus-visible:outline-none focus-visible:ring-0 p-0 text-3xl"
-                  onChange={(e) => {
-                    const newText = e.target.value;
-                    setTodos(
-                      todos.map((t) =>
-                        t.id === todo.id ? { ...t, text: newText } : t
-                      )
-                    );
-                  }}
-                  onBlur={() => finishEditing(todo.id, todo.text)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      finishEditing(todo.id, todo.text);
-                    }
-                  }}
-                  autoFocus
-                />
-              ) : (
-                <motion.span
-                  className="flex-grow group relative text-3xl text-nowrap overflow-clip text-ellipsis max-md:max-w-[10rem]"
-                  onClick={() => startEditing(todo.id)}
-                  initial={false}
-                  animate={{
-                    opacity: todo.completed ? "60%" : "100%",
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {todo.text}
-
-                  {todo.completed && (
-                    <motion.div
-                      className="h-px bg-current absolute top-[56%]"
-                      initial={{ width: "0%" }}
-                      animate={{ width: "100%" }}
-                      exit={{ width: "0%" }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  )}
-                </motion.span>
-              )}
-              <Button
-                variant="destructive"
-                className="rounded opacity-0 flex transition-all hover:opacity-100"
-                size="icon"
-                onClick={() => deleteTodo(todo.id)}
+        <div className="flex gap-4 flex-col">
+          <AnimatePresence initial={false}>
+            {todos.map((todo) => (
+              <motion.div
+                key={todo.id}
+                className="flex items-center space-x-2"
+                layout
+                initial={{ opacity: 0, y: 50, filter: "blur(20px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: 50, filter: "blur(20px)" }}
+                transition={{ duration: 0.3 }}
               >
-                <Trash />
-              </Button>
-            </motion.div>
-          ))}
+                <Checkbox
+                  checked={todo.completed}
+                  onCheckedChange={() => toggleTodo(todo.id)}
+                  className="mr-2 rounded-full size-6 border-2"
+                />
+                {editingId === todo.id ? (
+                  <Input
+                    value={todo.text}
+                    className="border-t-0 border-r-0 border-l-0 focus-visible:outline-none focus-visible:ring-0 p-0 text-3xl"
+                    onChange={(e) => {
+                      const newText = e.target.value;
+                      setTodos(
+                        todos.map((t) =>
+                          t.id === todo.id ? { ...t, text: newText } : t
+                        )
+                      );
+                    }}
+                    onBlur={() => finishEditing(todo.id, todo.text)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        finishEditing(todo.id, todo.text);
+                      }
+                    }}
+                    autoFocus
+                  />
+                ) : (
+                  <motion.span
+                    className="flex-grow group relative text-3xl text-nowrap overflow-clip text-ellipsis max-md:max-w-[10rem]"
+                    onClick={() => startEditing(todo.id)}
+                    initial={false}
+                    animate={{
+                      opacity: todo.completed ? "60%" : "100%",
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {todo.text}
+
+                    {todo.completed && (
+                      <motion.div
+                        className="h-px bg-current absolute top-[56%]"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        exit={{ width: "0%" }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+                  </motion.span>
+                )}
+                <Button
+                  variant="destructive"
+                  className="rounded opacity-0 flex transition-all hover:opacity-100"
+                  size="icon"
+                  onClick={() => deleteTodo(todo.id)}
+                >
+                  <Trash />
+                </Button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        <AnimatePresence initial={false}>
+          <motion.div className="w-full max-w-md mt-6">
+            <Input
+              ref={inputRef}
+              placeholder="Add a new todo"
+              className="border-t-0 border-r-0 border-l-0 focus-visible:outline-none focus-visible:ring-0 text-3xl pb-4"
+              value={newTodo}
+              onChange={(e) => setNewTodo(e.target.value)}
+              onBlur={addTodo}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  addTodo();
+                }
+              }}
+            />
+          </motion.div>
         </AnimatePresence>
       </div>
-      <AnimatePresence initial={false}>
-        <motion.div className="w-full max-w-md mt-6">
-          <Input
-            ref={inputRef}
-            placeholder="Add a new todo"
-            className="border-t-0 border-r-0 border-l-0 focus-visible:outline-none focus-visible:ring-0 text-3xl pb-4"
-            value={newTodo}
-            onChange={(e) => setNewTodo(e.target.value)}
-            onBlur={addTodo}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                addTodo();
-              }
-            }}
-          />
-        </motion.div>
-      </AnimatePresence>
     </div>
   );
 }
