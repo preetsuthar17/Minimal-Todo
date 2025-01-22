@@ -96,7 +96,7 @@ export default function Home() {
         animate={{ gap: todos.length === 0 ? "1rem" : "4rem" }}
         transition={{ duration: 0.3 }}
       >
-        <h1 className="text-3xl opacity-40 font-bold text-left flex items-start justify-start">
+        <h1 className="text-2xl opacity-40 font-bold text-left flex items-start justify-start">
           {new Date().toISOString().split("T")[0]}
         </h1>
         <div className="flex gap-4 flex-col">
@@ -119,7 +119,7 @@ export default function Home() {
                 {editingId === todo.id ? (
                   <Input
                     value={todo.text}
-                    className="border-t-0 border-r-0 border-l-0 focus-visible:outline-none focus-visible:ring-0 p-0 text-3xl"
+                    className="border-t-0 border-r-0 border-l-0 focus-visible:outline-none focus-visible:ring-0 p-0 text-2xl"
                     onChange={(e) => {
                       const newText = e.target.value;
                       setTodos(
@@ -138,7 +138,7 @@ export default function Home() {
                   />
                 ) : (
                   <motion.span
-                    className="flex-grow group relative text-3xl text-nowrap overflow-clip text-ellipsis max-md:max-w-[10rem]"
+                    className="flex-grow group relative text-2xl text-nowrap overflow-clip text-ellipsis max-md:max-w-[10rem]"
                     onClick={() => startEditing(todo.id)}
                     initial={false}
                     animate={{
@@ -173,11 +173,11 @@ export default function Home() {
         </div>
 
         <AnimatePresence initial={false}>
-          <motion.div className="w-full max-w-md mt-6">
+          <motion.div className="w-full max-w-md">
             <Input
               ref={inputRef}
               placeholder="Add a new todo"
-              className="border-t-0 border-r-0 border-l-0 focus-visible:outline-none focus-visible:ring-0 text-3xl pb-4"
+              className="border-t-0 border-r-0 border-l-0 focus-visible:outline-none focus-visible:ring-0 text-2xl pb-4"
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               onBlur={addTodo}
