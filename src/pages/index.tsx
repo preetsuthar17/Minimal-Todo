@@ -88,10 +88,10 @@ export default function Home() {
 
   return (
     <div
-      className={`${dmSans.variable} min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-dm-sans)] flex justify-center items-center  text-left flex-col font-medium tracking-tighter`}
+      className={`${dmSans.variable} min-h-screen  gap-8  font-[family-name:var(--font-dm-sans)] flex justify-center items-center  text-left flex-col font-medium tracking-tighter`}
     >
       <motion.div
-        className="w-full max-w-md flex justify-center flex-col"
+        className="w-full max-w-md flex justify-center flex-col p-8"
         initial={false}
         animate={{ gap: todos.length === 0 ? "1rem" : "4rem" }}
         transition={{ duration: 0.3 }}
@@ -104,7 +104,7 @@ export default function Home() {
             {todos.map((todo) => (
               <motion.div
                 key={todo.id}
-                className="flex items-center space-x-2"
+                className="flex items-center justify-between space-x-2"
                 layout
                 initial={{ opacity: 0, y: 50, filter: "blur(20px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -138,30 +138,21 @@ export default function Home() {
                   />
                 ) : (
                   <motion.span
-                    className="flex-grow group relative text-2xl text-nowrap overflow-clip text-ellipsis max-md:max-w-[10rem]"
+                    className="flex-grow group relative text-2xl  overflow-clip text-ellipsis"
                     onClick={() => startEditing(todo.id)}
                     initial={false}
                     animate={{
                       opacity: todo.completed ? "60%" : "100%",
+                      textDecoration: todo.completed ? "line-through" : "none",
                     }}
                     transition={{ duration: 0.3 }}
                   >
                     {todo.text}
-
-                    {todo.completed && (
-                      <motion.div
-                        className="h-px bg-current absolute top-[56%]"
-                        initial={{ width: "0%" }}
-                        animate={{ width: "100%" }}
-                        exit={{ width: "0%" }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    )}
                   </motion.span>
                 )}
                 <Button
-                  variant="destructive"
-                  className="rounded opacity-0 flex transition-all hover:opacity-100"
+                  variant="ghost"
+                  className="rounded  flex transition-all "
                   size="icon"
                   onClick={() => deleteTodo(todo.id)}
                 >
